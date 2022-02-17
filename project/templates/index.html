@@ -3,11 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Голосовой помощник</title>
+
+
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
+    <script src="{{ url_for('static', filename='js/jquery.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/wave.js')}}"></script>
+
+
 </head>
 <body>
 
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
+
 
 <div class="jumbotron text-center">
   <h1>Вопрос 1: {{ quest.quest }}</h1>
