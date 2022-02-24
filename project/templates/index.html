@@ -1,20 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Голосовой помощник</title>
+  <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+  <div class="wrapper screen-height">
+    <div class="container">
+      <div class="jumbotron__inner">
+        <div class="jumbotron__inner-item">
+          <h1><span>Вопрос 1:</span> {{ quest.quest }}</h1>
+          <p>Отвечайте в микрофон</p>
+        </div>
+        <div class="jumbotron__inner-form">
+          <form>
+            <button type="button" id="start">Запись</button>
+            <button type="button" id="stop">Стоп</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="../static/js/voice.js"></script>
+  <script src="../static/js/main.js"></script>
+
+</body>
+</html>
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <title>Голосовой помощник</title>
-
-
-    <link rel="stylesheet"
-      href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
-    <script src="{{ url_for('static', filename='js/jquery.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='js/wave.js')}}"></script>
-
-
 </head>
 <body>
 
-
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
 
 <div class="jumbotron text-center">
   <h1>Вопрос 1: {{ quest.quest }}</h1>
@@ -28,4 +54,4 @@
 </div>
 
 </body>
-</html>
+</html> -->
