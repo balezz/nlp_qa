@@ -18,5 +18,6 @@ Run docker
 ```
 docker run -it -p 5000:5000 -v "$(pwd)":/asr nlp_qa:v1
 ```
-Note, correct running on 127.0.0.1:5000  
+Note, correct running on 127.0.0.1:5000  not docker ip.  
+Download [vosk small model](https://alphacephei.com/vosk/models) and put in the project dir.
 
