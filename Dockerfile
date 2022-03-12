@@ -22,6 +22,10 @@ RUN pip install --upgrade pip \
 	flask \
 	soundfile
 
+RUN pip install vosk
+RUN pip install deeppavlov transformers
+RUN python -m deeppavlov install bert_sentence_embedder
+
 EXPOSE 5000
 WORKDIR /asr/project
 ENTRYPOINT ["python"]

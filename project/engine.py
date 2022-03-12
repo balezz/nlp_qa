@@ -1,6 +1,11 @@
 import sox
 import wave
+import json
 from vosk import Model, KaldiRecognizer, SetLogLevel
+from deeppavlov.core.common.file import read_json
+from deeppavlov import build_model, configs
+from scipy import spatial
+import data
 
 
 def vosk_decode(wave_path):
@@ -21,20 +26,48 @@ def vosk_decode(wave_path):
         if len(data) == 0:
             break
         if rec.AcceptWaveform(data):
-            print(rec.Result())
+            # print(rec.Result())
+            pass
         else:
-            print(rec.PartialResult())
+            pass
+            # print(rec.PartialResult())
 
-    print(rec.FinalResult())
+    res = rec.FinalResult()
+    return json.loads(res)['text']
 
 
 if __name__ == '__main__':
     wav_path = 'waves/war_1.wav'
     wav_info = sox.file_info.info(wav_path)
-    info = {}
-    info['Длительность аудио'] = str(round(wav_info['duration'], 2)) + ' с'
-    info['Число каналов'] = wav_info['channels']
-    info['Частота дискретизации'] = str(int(wav_info['sample_rate'])) + ' Гц'
+    info = {
+        'Длительность аудио': str(round(wav_info['duration'], 2)) + ' с',
+        'Число каналов': wav_info['channels'],
+        'Частота дискретизации': str(int(wav_info['sample_rate'])) + ' Гц'
+    }
     print(info)
 
-    vosk_decode(wav_path)
+    my_answer = vosk_decode(wav_path)
+    right_answer = data.answer
+    texts = [my_answer, right_answer]
+
+    bert_config = read_json(configs.embedder.bert_embedder)
+    bert_config['metadata']['variables']['BERT_PATH'] = 'rubert'
+    rubert_model = build_model(bert_config)
+
+    # Вычисляем эмбеддинги для каждого ответа
+    tokens, token_embs, subtokens, subtoken_embs, sent_max_embs, sent_mean_embs, bert_pooler_outputs = rubert_model(
+        texts)
+
+    # Эмбеддинги имеют размер: (количества токенов в ответе, 768)
+    # 768 - длина вектора внутреннего состояния модели RuBERT
+
+    sentense_embed = []
+    for te in token_embs:
+        # print(te.shape)
+        # Усредняем по токенам - словам в предложении
+        sentense_embed.append(te.mean(axis=0))
+
+    cs = spatial.distance.cosine(sentense_embed[0], sentense_embed[1])
+    result = int(round(cs * 10))
+
+    print(f'Оценка - {result} / 10')
