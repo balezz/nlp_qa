@@ -17,8 +17,9 @@
         </div>
         <div class="jumbotron__inner-form">
           <form>
-            <button type="button" id="start">Запись</button>
-            <button type="button" id="stop">Стоп</button>
+            <button class="start-stop"type="button" id="start" >Запись</button>
+            <button class="pause-button" type="button" id="pause" >Пауза</button>
+            <button class="start-stop" type="button" id="stop" >Стоп</button>
           </form>
         </div>
       </div>
@@ -26,32 +27,9 @@
   </div>
   
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="../static/js/recorder.js"></script>
   <script src="../static/js/voice.js"></script>
   <script src="../static/js/main.js"></script>
 
 </body>
 </html>
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Голосовой помощник</title>
-</head>
-<body>
-
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
-
-<div class="jumbotron text-center">
-  <h1>Вопрос 1: {{ quest.quest }}</h1>
-  <p>Отвечайте в микрофон</p>
-</div>
-
-<div class="container" align="center">
-    <button type="button" class="btn btn-danger">Запись</button>
-    <button type="button" class="btn btn-warning">Стоп</button>
-    <button type="button" class="btn btn-success">Оценить</button>
-</div>
-
-</body>
-</html> -->
