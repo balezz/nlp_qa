@@ -36,6 +36,30 @@ def vosk_decode(wave_path):
     return json.loads(res)['text']
 
 
+def compare_answer(my_answer):
+    right_answer = data.answer
+    texts = [my_answer, right_answer]
+
+    bert_config = read_json(configs.embedder.bert_embedder)
+    bert_config['metadata']['variables']['BERT_PATH'] = 'rubert'
+    rubert_model = build_model(bert_config)
+
+    # Эмбеддинги имеют размер: (количества токенов в ответе, 768)
+    # 768 - длина вектора внутреннего состояния модели RuBERT
+    # Вычисляем эмбеддинги для каждого ответа
+    tokens, token_embs, subtokens, subtoken_embs, sent_max_embs, sent_mean_embs, bert_pooler_outputs = rubert_model(
+        texts)
+
+    sentense_embed = []
+    # Усредняем по токенам - словам в предложении
+    for te in token_embs:
+        sentense_embed.append(te.mean(axis=0))
+
+    cs = spatial.distance.cosine(sentense_embed[0], sentense_embed[1])
+    result = int(round(cs * 10))
+    return result
+
+
 if __name__ == '__main__':
     wav_path = 'waves/war_1.wav'
     wav_info = sox.file_info.info(wav_path)
@@ -47,27 +71,6 @@ if __name__ == '__main__':
     print(info)
 
     my_answer = vosk_decode(wav_path)
-    right_answer = data.answer
-    texts = [my_answer, right_answer]
-
-    bert_config = read_json(configs.embedder.bert_embedder)
-    bert_config['metadata']['variables']['BERT_PATH'] = 'rubert'
-    rubert_model = build_model(bert_config)
-
-    # Вычисляем эмбеддинги для каждого ответа
-    tokens, token_embs, subtokens, subtoken_embs, sent_max_embs, sent_mean_embs, bert_pooler_outputs = rubert_model(
-        texts)
-
-    # Эмбеддинги имеют размер: (количества токенов в ответе, 768)
-    # 768 - длина вектора внутреннего состояния модели RuBERT
-
-    sentense_embed = []
-    for te in token_embs:
-        # print(te.shape)
-        # Усредняем по токенам - словам в предложении
-        sentense_embed.append(te.mean(axis=0))
-
-    cs = spatial.distance.cosine(sentense_embed[0], sentense_embed[1])
-    result = int(round(cs * 10))
+    result = compare_answer(my_answer)
 
     print(f'Оценка - {result} / 10')

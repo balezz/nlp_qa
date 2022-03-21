@@ -11,12 +11,12 @@
 
 Build docker
 ```
-docker build -t nlp_qa:v1 .
+docker build -t nlp_qa:v2 .
 ```
 
 Run docker flask app
 ```
-docker run -it -p 5000:5000 -v "$(pwd)":/asr nlp_qa:v1
+docker run --rm -it -p 5000:5000 -v "$(pwd)":/root nlp_qa:v2
 ```
 Note, correct running on 127.0.0.1:5000 , not on the docker ip.  
 
@@ -25,5 +25,5 @@ Download [vosk small model](https://alphacephei.com/vosk/models) and put it in t
 
 Run docker CLI  
 ```
-docker run --rm -it --entrypoint bash  -v "$(pwd)":/asr nlp_qa:v1
+docker run --rm -it --entrypoint bash  -v "$(pwd)":/root nlp_qa:v2
 ```
