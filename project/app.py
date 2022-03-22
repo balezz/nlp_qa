@@ -3,6 +3,7 @@ import sox.file_info
 from flask import Flask, render_template, request
 from pathlib import Path
 from engine import vosk_decode, compare_answer
+from data import DATA
 
 # create and initialize a new Flask app
 app = Flask(__name__)
@@ -16,7 +17,7 @@ app.config['WAV_FOLDER'] = Path('waves')
 
 @app.route('/')
 def index():
-    quest = {'quest': 'Дайте определение войны?'}
+    quest = {'quest': f'Дайте определение: {DATA[0][0]}'}
     return render_template('index.html', quest=quest)
 
 
@@ -31,10 +32,12 @@ def api_message():
             f.write(data)
         wav_info = sox.file_info.info(wav_path)
         print('Duration: ' + str(round(wav_info['duration'], 2)) + ' sec')
-        answer = vosk_decode(wav_path)
-        print(answer)
-        result = compare_answer(answer)
-        response = f'Оценка - {result} / 10'
+        my_answer = vosk_decode(wav_path)
+        right_answer = DATA[0][1]
+        result = compare_answer(my_answer, right_answer)
+        print(f'You: {my_answer}')
+        print(f'Right: {right_answer}')
+        response = f'Score - {result} / 10'
         print(response)
         return response
 

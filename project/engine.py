@@ -36,8 +36,7 @@ def vosk_decode(wave_path):
     return json.loads(res)['text']
 
 
-def compare_answer(my_answer):
-    right_answer = data.answer
+def compare_answer(my_answer, right_answer):
     texts = [my_answer, right_answer]
 
     bert_config = read_json(configs.embedder.bert_embedder)
