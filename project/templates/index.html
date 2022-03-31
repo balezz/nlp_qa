@@ -12,7 +12,7 @@
     <div class="container">
       <div class="jumbotron__inner">
         <div class="jumbotron__inner-item">
-          <h1><span>Вопрос 1:</span> {{ quest.quest }}</h1>
+          <h1 id="quest"><span>Вопрос 1:</span> {{ quest.quest }}</h1>
           <p>Отвечайте в микрофон</p>
         </div>
         <div class="jumbotron__inner-form">
@@ -20,6 +20,7 @@
             <button class="start-stop"type="button" id="start" >Запись</button>
             <button class="pause-button" type="button" id="pause" >Пауза</button>
             <button class="start-stop" type="button" id="stop" >Стоп</button>
+            <!-- <a class="btn-update" href="http://127.0.0.1:5000/" role="button">-</a> --> <!--update to html-->
           </form>
         </div>
       </div>
@@ -30,6 +31,5 @@
   <script src="../static/js/recorder.js"></script>
   <script src="../static/js/voice.js"></script>
   <script src="../static/js/main.js"></script>
-
 </body>
 </html>
