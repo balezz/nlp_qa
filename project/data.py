@@ -1,7 +1,5 @@
-import string
-
-# with open('../tests/text/prob_theory_10', encoding='utf-8') as f: # linux
-with open('tests/text/prob_theory_10', encoding='utf-8') as f:  # windows
+with open('../tests/text/prob_theory_10.txt', encoding='utf-8') as f: # linux
+# with open('tests/text/prob_theory_10.txt', encoding='utf-8') as f:  # windows
     lines = f.readlines()
     for line in lines:
         print(line.strip())
