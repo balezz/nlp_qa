@@ -1,8 +1,6 @@
 with open('../tests/text/prob_theory_10.txt', encoding='utf-8') as f: # linux
-# with open('tests/text/prob_theory_10.txt', encoding='utf-8') as f:  # windows
     lines = f.readlines()
-    for line in lines:
-        print(line.strip())
+
 DATA = [s.split('-') for s in lines]
 
 

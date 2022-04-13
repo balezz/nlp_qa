@@ -10,12 +10,12 @@ from deeppavlov import build_model, configs
 bert_config = read_json(configs.embedder.bert_embedder)
 bert_config['metadata']['variables']['BERT_PATH'] = 'rubert'
 rubert_model = build_model(bert_config)
-
+VOSK_URI = 'ws://alphacep:2700'
 
 async def kaldi_server_predict(uri, wav_path):
     result = []
-    async with websockets.connect(uri) as websocket:
 
+    async with websockets.connect(uri) as websocket:
         wf = wave.open(wav_path, "rb")
         await websocket.send('{ "config" : { "sample_rate" : %d } }' % (wf.getframerate()))
         buffer_size = int(wf.getframerate() * 0.2) # 0.2 seconds of audio
@@ -33,7 +33,8 @@ async def kaldi_server_predict(uri, wav_path):
     return result
 
 
-def vosk_decode(wav_path, uri='ws://localhost:2700'):
+def vosk_decode(wav_path, uri=VOSK_URI):
+    print(f'start asr on {uri}')
     kaldi_result = asyncio.run(kaldi_server_predict(uri, wav_path))
     d = eval(kaldi_result[-1])
     return d['text']
