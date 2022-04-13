@@ -7,15 +7,10 @@
 * NLP для сравнения близости двух текстов (ответа ученика и правильного ответа) - [DeepPavlov](https://deeppavlov.ai/).
 
 
-## Docker
+## Запуск приложения
 
-Build docker
-```
-docker build -t nlp_qa:v3 .
-```
-
-Run docker-compose
 ```
 docker-compose up
 ```
+
 Note, correct running on 127.0.0.1:5000 , not on the docker ip.  
