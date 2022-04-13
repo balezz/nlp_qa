@@ -1,7 +1,4 @@
-.DS_Store
-.AppleDouble
-.LSOverride
-.vs
-.nltk_data
+.idea
+nltk_data
 
 *.wav
