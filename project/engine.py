@@ -1,75 +1,59 @@
-import sox
+import asyncio
+
+import numpy as np
+import websockets
 import wave
-import json
-from vosk import Model, KaldiRecognizer, SetLogLevel
+from data import DATA
 from deeppavlov.core.common.file import read_json
 from deeppavlov import build_model, configs
-from scipy import spatial
-import data
 
+bert_config = read_json(configs.embedder.bert_embedder)
+bert_config['metadata']['variables']['BERT_PATH'] = 'rubert'
+rubert_model = build_model(bert_config)
+VOSK_URI = 'ws://alphacep:2700'
 
-def vosk_decode(wave_path):
-    SetLogLevel(0)
+async def kaldi_server_predict(uri, wav_path):
+    result = []
 
-    wf = wave.open(wave_path, "rb")
+    async with websockets.connect(uri) as websocket:
+        wf = wave.open(wav_path, "rb")
+        await websocket.send('{ "config" : { "sample_rate" : %d } }' % (wf.getframerate()))
+        buffer_size = int(wf.getframerate() * 0.2) # 0.2 seconds of audio
+        while True:
+            data = wf.readframes(buffer_size)
 
-    if wf.getnchannels() != 1 or wf.getsampwidth() != 2 or wf.getcomptype() != "NONE":
-        print("Audio file must be WAV format mono PCM.")
-        exit(1)
+            if len(data) == 0:
+                break
 
-    model = Model("vosk-model-small")
-    rec = KaldiRecognizer(model, wf.getframerate())
-    rec.SetWords(True)
+            await websocket.send(data)
+            result.append(await websocket.recv())
 
-    while True:
-        data = wf.readframes(4000)
-        if len(data) == 0:
-            break
-        if rec.AcceptWaveform(data):
-            # print(rec.Result())
-            pass
-        else:
-            pass
-            # print(rec.PartialResult())
-
-    res = rec.FinalResult()
-    return json.loads(res)['text']
-
-
-def compare_answer(my_answer, right_answer):
-    texts = [my_answer, right_answer]
-
-    bert_config = read_json(configs.embedder.bert_embedder)
-    bert_config['metadata']['variables']['BERT_PATH'] = 'rubert'
-    rubert_model = build_model(bert_config)
-
-    # Эмбеддинги имеют размер: (количества токенов в ответе, 768)
-    # 768 - длина вектора внутреннего состояния модели RuBERT
-    # Вычисляем эмбеддинги для каждого ответа
-    tokens, token_embs, subtokens, subtoken_embs, sent_max_embs, sent_mean_embs, bert_pooler_outputs = rubert_model(
-        texts)
-
-    sentense_embed = []
-    # Усредняем по токенам - словам в предложении
-    for te in token_embs:
-        sentense_embed.append(te.mean(axis=0))
-
-    cs = spatial.distance.cosine(sentense_embed[0], sentense_embed[1])
-    result = int(round(cs * 10))
+        await websocket.send('{"eof" : 1}')
+        result.append(await websocket.recv())
     return result
+
+
+def vosk_decode(wav_path, uri=VOSK_URI):
+    print(f'start asr on {uri}')
+    kaldi_result = asyncio.run(kaldi_server_predict(uri, wav_path))
+    d = eval(kaldi_result[-1])
+    return d['text']
+
+
+def cosine_similarity(x, y):
+    return x@y.T / (np.linalg.norm(x) * np.linalg.norm(y))
+
+
+def score_answer(my_answer, right_answer):
+    texts = [my_answer, right_answer]
+    tokens, token_embs, _, _, _, sent_mean_embs, _ = rubert_model(texts)
+    return cosine_similarity(*sent_mean_embs)
 
 
 if __name__ == '__main__':
     wav_path = 'waves/war_1.wav'
-    wav_info = sox.file_info.info(wav_path)
-    info = {
-        'Длительность аудио': str(round(wav_info['duration'], 2)) + ' с',
-        'Число каналов': wav_info['channels'],
-        'Частота дискретизации': str(int(wav_info['sample_rate'])) + ' Гц'
-    }
-    print(info)
-
     my_answer = vosk_decode(wav_path)
-    result = compare_answer(my_answer)
+    right_answer = DATA[0][1]
+    result = score_answer(my_answer, right_answer)
 
-    print(f'Оценка - {result} / 10')
+    print(f'Оценка - {result*10} / 10')
