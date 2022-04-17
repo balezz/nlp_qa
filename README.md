@@ -8,9 +8,12 @@
 
 
 ## Запуск приложения
+Скачайте и скопируйте содержимое архива с моделью [rubert](http://files.deeppavlov.ai/deeppavlov_data/bert/rubert_cased_L-12_H-768_A-12_pt.tar.gz) в папку ```project/rubert```   
+
+Из папки проекта ```nlp_qa``` запустите приложение командой:  
 
 ```
 docker-compose up
 ```
 
-Note, correct running on 127.0.0.1:5000 , not on the docker ip.  
+Откройте браузер по ссылке [localhost:5000](127.0.0.1:5000) .
