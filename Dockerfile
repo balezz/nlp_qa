@@ -1,15 +1,17 @@
 # Dockerfile для сборки образа проекта распознавания речи
 FROM python:3.7.13-slim
 
+WORKDIR /root
+
 # Установка необходимых python-библиотек
 RUN pip install --upgrade pip
-RUN pip install jinja2==3.0.0
-RUN pip install itsdangerous==2.0.1
-RUN pip install flask
-RUN pip install deeppavlov transformers
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
 RUN python -m deeppavlov install bert_sentence_embedder
 
-EXPOSE 5000
+COPY . .
 WORKDIR /root/project
+EXPOSE 5000
+
 ENTRYPOINT ["python"]
 CMD ["app.py"]

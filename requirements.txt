@@ -1,2 +1,7 @@
-sox
-flask
+jinja2==3.0.0
+itsdangerous==2.0.1
+flask==2.0.3
+cryptography==3.2
+click==7.1.2
+deeppavlov==0.17.2
+transformers==4.6.0

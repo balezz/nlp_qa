@@ -12,6 +12,7 @@ bert_config['metadata']['variables']['BERT_PATH'] = 'rubert'
 rubert_model = build_model(bert_config)
 VOSK_URI = 'ws://alphacep:2700'
 
+
 async def kaldi_server_predict(uri, wav_path):
     result = []
 
