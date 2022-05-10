@@ -40,6 +40,7 @@ li {
 }
 
 .jumbotron__inner {
+    /* display: none; */
     position: absolute;
     width: 100%;
     top: 50%;
@@ -126,4 +127,38 @@ button {
 .pause-button:hover {
     border: rgba(255, 207, 72, 0.7) 1px solid;
 }
-
+.result__box{
+    display: none;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    text-align: center;
+    transform: translate(0%, -50%);
+    /* padding: 0 15px;  */
+    /* opacity: 0; */
+}
+.result__inner{
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.result__inner-answer h1{
+    text-align: left;
+    margin-left: 30px;
+}
+.answer{
+    display: block;
+    padding: 20px 10px;
+    width: 450px;
+    height: 250px;
+    border-radius: 3px;
+    background-color: #fff;
+    margin: 0 20px;
+    text-align: left;
+}
+.result__box-score{
+    margin-top: 30px;
+    font-size: 26px;
+}

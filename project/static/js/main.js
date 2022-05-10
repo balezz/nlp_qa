@@ -14,8 +14,16 @@ $(function () {
         $(".pause-button").toggleClass('active');
         
     });
+    $("#next").click(function () {
+        $(".result__box").fadeOut(200)
+        $(".jumbotron__inner").fadeIn(200)
+
+    });
     $("#stop").click(function () {
-        $('#quest').load(document.URL + ' #quest');
+        // $('#quest').load(document.URL + ' #quest');
+        $(".jumbotron__inner").fadeOut(200)
+        $(".result__box").fadeIn(200)
+        
     });
 });
 

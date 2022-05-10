@@ -1,4 +1,4 @@
-with open('../tests/text/prob_theory_10.txt', encoding='utf-8') as f: # linux
+with open('tests/text/prob_theory_10.txt', encoding='utf-8') as f: # linux
     lines = f.readlines()
 
 DATA = [s.split('-') for s in lines]

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,29 +8,62 @@
   <title>Голосовой помощник</title>
   <link rel="stylesheet" href="../static/css/style.css">
 </head>
+
 <body>
   <div class="wrapper screen-height">
-    <div class="container">
-      <div class="jumbotron__inner">
-        <div class="jumbotron__inner-item">
-          <h1 id="quest"><span>Вопрос 1:</span> {{ quest.quest }}</h1>
-          <p>Отвечайте в микрофон</p>
+    <div class="jumbotron__inner visible">
+      <div class="jumbotron__inner-item">
+        <h1 class="quest"> Вопрос 1: {{ quest.quest }}</h1>
+        <p>Отвечайте в микрофон</p>
+      </div>
+      <div class="jumbotron__inner-form">
+        <form>
+          <button class="start-stop" type="button" id="start">Запись</button>
+          <button class="pause-button" type="button" id="pause">Пауза</button>
+          <button class="start-stop" type="button" id="stop">Стоп</button>
+          <!-- <a class="btn-update" href="http://127.0.0.1:5000/" role="button">-</a> -->
+          <!--update to html-->
+        </form>
+      </div>
+    </div>
+    <div class="result__box">
+      <div class="container">
+        <div class="result__inner">
+          <div class="result__inner-answer">
+            <h1>
+              Ваш ответ:
+            </h1>
+            <div class="answer my-answer">
+              <!-- changes js -->
+            </div>
+          </div>
+          <div class="result__inner-answer">
+            <h1>
+              Правильный ответ:
+            </h1>
+            <div class="answer right-answer">
+              <!-- changes js -->
+            </div>
+          </div>
         </div>
-        <div class="jumbotron__inner-form">
-          <form>
-            <button class="start-stop"type="button" id="start" >Запись</button>
-            <button class="pause-button" type="button" id="pause" >Пауза</button>
-            <button class="start-stop" type="button" id="stop" >Стоп</button>
-            <!-- <a class="btn-update" href="http://127.0.0.1:5000/" role="button">-</a> --> <!--update to html-->
-          </form>
+        <div class="result__box-score">
+          Результат:
+          <h1>
+            <!-- changes js -->
+          </h1>
+        </div>
+        <div class="result__box-form">
+          <button class="next" type="button" id="next">Next</button>
         </div>
       </div>
     </div>
+
   </div>
-  
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="../static/js/recorder.js"></script>
   <script src="../static/js/voice.js"></script>
   <script src="../static/js/main.js"></script>
 </body>
+
 </html>

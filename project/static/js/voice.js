@@ -1,5 +1,7 @@
 URL = window.URL || window.webkitURL;
 
+const PERSONAL_URL = "http://127.0.0.1:5000/"
+
 let gumStream;
 let rec;
 let input;
@@ -10,10 +12,13 @@ let audioContext
 let recordButton = document.getElementById("start");
 let stopButton = document.querySelector('#stop');
 let pauseButton = document.querySelector('#pause');
+let nextButton = document.querySelector('#next');
 
 recordButton.addEventListener("click", startRecording);
 stopButton.addEventListener("click", stopRecording);
 pauseButton.addEventListener("click", pauseRecording);
+nextButton.addEventListener("click", getQuestion)
+
 
 
 function startRecording() {
@@ -66,21 +71,42 @@ function stopRecording() {
 
     gumStream.getAudioTracks()[0].stop();
     rec.exportWAV(createDownloadLink);
+    // getData()
 }
 
-function createDownloadLink(blob) {
+async function createDownloadLink(blob) {
     let xhr = new XMLHttpRequest();
     xhr.onload = function (e) {
         if (this.readyState === 4) {
             console.log("Server returned: ", e.target.responseText);
         }
     };
+
     let fd = new FormData();
     fd.append('voice', blob);
 
-    fetch("http://127.0.0.1:5000/", {
+    await fetch(PERSONAL_URL, {
         method: "POST",
         body: fd
     });
+    let [myAnswer, rightAnswer, score] = ['Мой ответ', 'Правильный ответ', '8'];
+    document.querySelector('.my-answer').innerHTML = myAnswer;
+    document.querySelector('.right-answer').innerHTML = rightAnswer;
+    document.querySelector('.result__box-score > h1').innerHTML = `${score}/10`;
+
+}
+
+async function getQuestion() {
+    //     let response = await fetch(PERSONAL_URL, {
+    //         method: "POST",
+    //         body: fd
+    //     });
+    //     let commits =  await response.json();
+
+    //     console.log(commits)
+    let [tempIndex, tempIssue] = ['2', 'Передаточная функция'];
+    document.querySelector('.quest').innerHTML = `Вопрос ${tempIndex}: Дайте определение: ${tempIssue}`;
+
+
 
 }
